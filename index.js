@@ -16,6 +16,8 @@ console.log(uri)
 client.connect(err => {
   const serviceCollection = client.db("lawyersLobbying").collection("services");
   const bookingCollection = client.db("lawyersLobbying").collection("bookings");
+  const reviewCollection = client.db("lawyersLobbying").collection("reviews");
+  
   app.get("/services",(req, res) =>{
     serviceCollection.find()
     .toArray((err, items) =>{
@@ -68,6 +70,25 @@ client.connect(err => {
       res.send(items)
     })
   })
+  //add review 
+
+  app.post("/addreview",(req, res)=>{
+    const reviewData =req.body;
+   reviewCollection.insertOne(reviewData)
+    .then(result=>{
+      res.send(result.insertedCount>0)
+      console.log("inserted count",result)
+    })
+  })
+
+  //get dynamic reviews
+  app.get("/reviewsData",(req, res) =>{
+    reviewCollection.find()
+    .toArray((err, items) =>{
+      res.send(items)
+    })
+  })
+  
 
 });
 
