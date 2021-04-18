@@ -17,7 +17,7 @@ client.connect(err => {
   const serviceCollection = client.db("lawyersLobbying").collection("services");
   const bookingCollection = client.db("lawyersLobbying").collection("bookings");
   const reviewCollection = client.db("lawyersLobbying").collection("reviews");
-  
+  const adminCollection = client.db("lawyersLobbying").collection("admins");
   app.get("/services",(req, res) =>{
     serviceCollection.find()
     .toArray((err, items) =>{
@@ -86,6 +86,16 @@ client.connect(err => {
     reviewCollection.find()
     .toArray((err, items) =>{
       res.send(items)
+    })
+  })
+
+  //add admin
+  app.post("/addAdmin",(req, res)=>{
+    const adminData =req.body;
+    adminCollection.insertOne(adminData)
+    .then(result=>{
+      res.send(result.insertedCount>0)
+      console.log("inserted count",result)
     })
   })
   
