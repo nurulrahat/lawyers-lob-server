@@ -99,6 +99,15 @@ client.connect(err => {
     })
   })
   
+  //get admin
+  app.get("/adminEmail",(req, res) =>{
+    adminCollection.find({email:req.query.eml})
+    .toArray((err, items) =>{
+      res.send(items)
+      
+      
+    })
+  })
 
 });
 
