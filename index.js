@@ -53,7 +53,7 @@ client.connect(err => {
       res.send(items[0])
     })
   })
-  //bookingsCollection 
+  //bookingsCollectionInsertion
 
   app.post("/insertBooking",(req, res)=>{
     const bookingService =req.body;
