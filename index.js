@@ -1,10 +1,10 @@
+require('dotenv').config()
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
 const app = express()
 const port =5000;
 const cors= require('cors')
 const bodyParser = require('body-parser')
-require('dotenv').config()
 const ObjectId=require('mongodb').ObjectId;
 app.use(bodyParser.json())
 app.use(cors())
@@ -18,13 +18,28 @@ client.connect(err => {
   const bookingCollection = client.db("lawyersLobbying").collection("bookings");
   const reviewCollection = client.db("lawyersLobbying").collection("reviews");
   const adminCollection = client.db("lawyersLobbying").collection("admins");
-  app.get("/services",(req, res) =>{
-    serviceCollection.find()
-    .toArray((err, items) =>{
-      // console.log(items)
-      res.send(items)
-    })
-  })
+
+
+  // app.get("/services",(req, res) =>{
+  //   serviceCollection.find()
+  //   .toArray((err, items) =>{
+  //     console.log(items)
+  //     res.send(items)
+  //     console.log("this service api")
+  //   })
+  // })
+
+  app.get("/services", (req, res) => {
+    serviceCollection.find().toArray((err, items) => {
+      if (err) {
+        console.error('❌ MongoDB query failed:', err);
+        return res.status(500).send('Failed to fetch services');
+      }
+      console.log('✅ Services fetched:', items); // <-- See what it logs
+      res.send(items);
+    });
+  });
+  
   app.post("/admin",(req, res)=>{
     const service =req.body;
     console.log(service)
@@ -67,7 +82,8 @@ client.connect(err => {
   app.get("/bookedData",(req, res) =>{
     bookingCollection.find({email:req.query.eml})
     .toArray((err, items) =>{
-      res.send(items)
+      console.log("this is booked data")
+      res.send("this is booked data")
     })
   })
   //add review 
@@ -86,6 +102,7 @@ client.connect(err => {
     reviewCollection.find()
     .toArray((err, items) =>{
       res.send(items)
+      console.log("this is ok")
     })
   })
 
@@ -113,7 +130,8 @@ client.connect(err => {
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Sever is Running!')
+    console.log("this is home")
   })
   
   app.listen(process.env.PORT || port)
