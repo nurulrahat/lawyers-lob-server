@@ -120,7 +120,7 @@ client.connect(err => {
   app.get("/adminEmail",(req, res) =>{
     adminCollection.find({email:req.query.eml})
     .toArray((err, items) =>{
-      res.send(items)
+       res.send(items)
       
       
     })
